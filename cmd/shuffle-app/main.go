@@ -11,6 +11,9 @@ func main() {
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(200, "index.html", gin.H{})
 	})
+	router.GET("/projects", func(ctx *gin.Context) {
+		ctx.HTML(200, "/project/index.html", gin.H{"data": "todo"})
+	})
 
 	router.Run()
 }

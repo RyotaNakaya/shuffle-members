@@ -1,0 +1,3 @@
+development:
+  driver: mysql
+  open: user=root dbname=shuffle_members_development sslmode=disable password=
