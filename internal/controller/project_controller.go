@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
@@ -20,21 +19,22 @@ func (p *ProjectController) Fecth(ctx *gin.Context) {
 	// p, err := s.GetAll()
 	err := errors.New("error")
 
-	project := model.Project{}
-
-	resJSON, err := json.Marshal(project)
-	if err != nil {
-		fmt.Println(err)
+	Project := model.Project{
+		ID:          1,
+		Name:        "プロジェクト",
+		Description: "説明",
 	}
+
+	err = nil
 
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		ctx.JSON(200, resJSON)
+		ctx.HTML(200, "index.html", Project)
 	}
 }
 
-// FecthAll はプロジェクトのの一覧を取得します
+// FecthAll はプロジェクトの一覧を取得します
 func (p *ProjectController) FecthAll() string {
 	// DBから一覧を取ってくる
 	return "FecthAll"

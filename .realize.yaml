@@ -1,0 +1,23 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+- name: shuffle-members
+  path: .
+  commands:
+    install:
+      status: false
+      method: "go build -o temp_output/server cmd/shuffle-app/main.go"
+    run:
+      status: true
+      method: ./temp_output/server
+  watcher:
+    extensions:
+    - go
+    paths:
+    - ./
+    ignored_paths:
+    - .git
+    - .realize
+    - vendor
