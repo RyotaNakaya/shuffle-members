@@ -3,6 +3,7 @@
 CREATE TABLE IF NOT EXISTS `project` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
     `updated_at` TIMESTAMP,
     `created_at` TIMESTAMP,
 
