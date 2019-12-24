@@ -4,8 +4,14 @@
     <title>Project</title>
   </head>
   <body>
-    <h1>{{.ID}}</h1>
-    <h1>{{.Name}}</h1>
-    <h1>{{.Description}}</h1>
+    <table>
+      {{range .}}
+      <tr>
+        <td>{{.ID}}</td>
+        <td>{{.Name}}</td>
+        <td>{{.Description}}</td>
+      </tr>
+      {{end}}
+    </table>
   </body>
 </html>

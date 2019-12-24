@@ -12,11 +12,9 @@ import (
 type ProjectController struct {
 }
 
-// Fecth はプロジェクトを取得します
-func (p *ProjectController) Fecth(ctx *gin.Context) {
+// Show はプロジェクトを取得します
+func (p *ProjectController) Show(ctx *gin.Context) {
 	// DBから取ってくる
-	// var s user.Service
-	// p, err := s.GetAll()
 	err := errors.New("error")
 
 	Project := model.Project{
@@ -30,17 +28,39 @@ func (p *ProjectController) Fecth(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		ctx.HTML(200, "index.html", Project)
+		ctx.HTML(200, "show.html", Project)
 	}
 }
 
 // FecthAll はプロジェクトの一覧を取得します
-func (p *ProjectController) FecthAll() string {
-	// DBから一覧を取ってくる
-	return "FecthAll"
+func (p *ProjectController) FecthAll(ctx *gin.Context) {
+	// DBから取ってくる
+	err := errors.New("error")
+
+	Projects := []model.Project{
+		model.Project{
+			ID:          1,
+			Name:        "プロジェクト",
+			Description: "説明",
+		},
+		model.Project{
+			ID:          2,
+			Name:        "プロジェクト2",
+			Description: "説明",
+		},
+	}
+
+	err = nil
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		ctx.HTML(200, "index.html", Projects)
+	}
 }
 
 // Create はプロジェクトの作成を行います
 func (p *ProjectController) Create() string {
+	// value := c.QueryParam("value")
 	return "Create"
 }
