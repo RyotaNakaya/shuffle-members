@@ -1,18 +1,19 @@
 package main
 
 import (
+	"github.com/RyotaNakaya/shuffle-members/db"
 	ctrl "github.com/RyotaNakaya/shuffle-members/internal/controller"
 	"github.com/gin-gonic/gin"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 func main() {
+	db.Init()
+	defer db.Close()
+
 	router := gin.Default()
 	router.LoadHTMLGlob("web/template/*.html")
 	router.LoadHTMLGlob("web/template/project/*.html")
-
-	// router.GET("/", func(ctx *gin.Context) {
-	// 	ctx.HTML(200, "index.html", gin.H{})
-	// })
 
 	p := router.Group("/project")
 	{
