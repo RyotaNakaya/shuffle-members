@@ -10,5 +10,5 @@ type Project struct {
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index" json:"-"`
+	DeletedAt time.Time `sql:"index" json:"-"`
 }

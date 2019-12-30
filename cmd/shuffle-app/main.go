@@ -18,9 +18,10 @@ func main() {
 	p := router.Group("/project")
 	{
 		ctrl := ctrl.ProjectController{}
-		p.GET("/index", ctrl.FecthAll)
+		p.GET("/index", ctrl.Index)
+		p.GET("/new", ctrl.New)
+		p.POST("/create", ctrl.Create)
 		// p.GET("/:id", ctrl.Show)
-		// p.POST("", ctrl.Create)
 		// p.PUT("/:id", ctrl.Update)
 		// p.DELETE("/:id", ctrl.Delete)
 	}
