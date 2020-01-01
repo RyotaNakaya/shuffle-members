@@ -12,7 +12,6 @@ func main() {
 	defer db.Close()
 
 	router := gin.Default()
-	router.LoadHTMLGlob("web/template/*.html")
 	router.LoadHTMLGlob("web/template/**/*.html")
 
 	c := ctrl.ProjectController{}
