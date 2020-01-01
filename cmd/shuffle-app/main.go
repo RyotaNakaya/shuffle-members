@@ -13,7 +13,10 @@ func main() {
 
 	router := gin.Default()
 	router.LoadHTMLGlob("web/template/*.html")
-	router.LoadHTMLGlob("web/template/project/*.html")
+	router.LoadHTMLGlob("web/template/**/*.html")
+
+	c := ctrl.ProjectController{}
+	router.GET("/", c.Index)
 
 	p := router.Group("/project")
 	{

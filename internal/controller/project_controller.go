@@ -47,8 +47,9 @@ func (p *ProjectController) Create(ctx *gin.Context) {
 	}
 	if err := db.Create(&prj).Error; err != nil {
 		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.HTML(500, "new.html", gin.H{"Error": err})
 	}
-	// TODO: delete_at にゼロバリューが入ってしまう
 
 	ctx.Redirect(302, "/project/index")
 }
