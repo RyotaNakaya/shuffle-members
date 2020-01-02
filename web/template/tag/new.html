@@ -22,11 +22,11 @@
               <input type="text" name="name" class="form-control" placeholder="Enter name">
             </div>
             <div class="form-group">
-                <input type="text" name="pid" class="form-control" style="display: none;" value="{{ .PID }}">
+                <input type="text" name="pid" class="form-control" style="display: none;" value="{{.PID}}">
             </div>
             <button type="submit" class="btn btn-primary">作成</button>
           </form>
-          <a class="btn btn-secondary" href="/tag/index/{{ .PID }}">戻る</a>
+          <a class="btn btn-secondary" href="/tag/index?pid={{.PID}}">戻る</a>
         </div>
         <div class="col-2"></div>
       </div>

@@ -32,8 +32,8 @@ func main() {
 	t := router.Group("/tag")
 	{
 		ctrl := ctrl.TagController{}
-		t.GET("/index/:pid", ctrl.Index)
-		t.GET("/new/:pid", ctrl.New)
+		t.GET("/index", ctrl.Index)
+		t.GET("/new", ctrl.New)
 		t.POST("/create", ctrl.Create)
 		t.GET("/delete/:id", ctrl.Delete)
 	}

@@ -26,12 +26,12 @@
             <tr>
               <td>{{.Name}}</td>
               <td>{{.CreatedAt}}</td>
-              <td><a class="btn btn-secondary btn-sm" href="/tag/delete/{{.ID}}">削除</a></td>
+              <td><a class="btn btn-secondary btn-sm" href="/tag/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
             </tr>
             {{end}}
           </table>
           <div>
-            <a class="btn btn-primary" href="/tag/new/{{.PID}}">追加</a>
+            <a class="btn btn-primary" href="/tag/new?pid={{.PID}}">追加</a>
           </div>
           <div>
             <a class="btn btn-secondary" href="/project/show/{{.PID}}">戻る</a>
