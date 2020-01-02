@@ -13,10 +13,6 @@ import (
 type ProjectController struct {
 }
 
-// Show はプロジェクトを取得します
-func (p *ProjectController) Show(ctx *gin.Context) {
-}
-
 // Index はプロジェクトの一覧を取得します
 func (p *ProjectController) Index(ctx *gin.Context) {
 	db := db.GetDB()
@@ -26,12 +22,33 @@ func (p *ProjectController) Index(ctx *gin.Context) {
 		fmt.Println(err)
 	}
 
-	ctx.HTML(200, "index.html", Projects)
+	ctx.HTML(200, "project/index.html", Projects)
+}
+
+// Show はプロジェクトの詳細を表示します
+func (p *ProjectController) Show(ctx *gin.Context) {
+	db := db.GetDB()
+
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
+
+	var Project model.Project
+	if err := db.First(&Project, id).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
+
+	ctx.HTML(200, "project/show.html", Project)
 }
 
 // New はプロジェクトの新規作成画面に遷移します
 func (p *ProjectController) New(ctx *gin.Context) {
-	ctx.HTML(200, "new.html", "")
+	ctx.HTML(200, "project/new.html", "")
 }
 
 // Create はプロジェクトの作成を行います
@@ -49,7 +66,7 @@ func (p *ProjectController) Create(ctx *gin.Context) {
 	if err := db.Create(&prj).Error; err != nil {
 		fmt.Println(err)
 		// TODO: エラーハンドリング
-		ctx.HTML(500, "new.html", gin.H{"Error": err})
+		ctx.HTML(500, "project/new.html", gin.H{"Error": err})
 	}
 
 	ctx.Redirect(302, "/project/index")

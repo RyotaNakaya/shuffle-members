@@ -1,4 +1,4 @@
-{{ define "project/index.html" }}
+{{ define "tag/index.html" }}
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>プロジェクト一覧</title>
+    <title>タグ一覧</title>
   </head>
   <body>
     <div class="container">
       <h1>
-        プロジェクト一覧
+        タグ一覧
       </h1>
       <div class="row">
         <div class="col-2"></div>
@@ -19,21 +19,22 @@
           <table class="table">
             <tr>
               <th>名称</th>
-              <th>説明</th>
-              <th></th>
+              <th>作成日</th>
               <th></th>
             </tr>
-            {{range .}}
+            {{range .Tags}}
             <tr>
               <td>{{.Name}}</td>
-              <td>{{.Description}}</td>
-              <td><a class="btn btn-secondary btn-sm" href="/project/show/{{.ID}}">詳細</a></td>
-              <td><a class="btn btn-secondary btn-sm" href="/project/delete/{{.ID}}">削除</a></td>
+              <td>{{.CreatedAt}}</td>
+              <td><a class="btn btn-secondary btn-sm" href="/tag/delete/{{.ID}}">削除</a></td>
             </tr>
             {{end}}
           </table>
           <div>
-            <a class="btn btn-primary" href="/project/new">追加</a>
+            <a class="btn btn-primary" href="/tag/new/{{.PID}}">追加</a>
+          </div>
+          <div>
+            <a class="btn btn-secondary" href="/project/show/{{.PID}}">戻る</a>
           </div>
         </div>
         <div class="col-2"></div>

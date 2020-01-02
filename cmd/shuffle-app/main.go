@@ -24,9 +24,18 @@ func main() {
 		p.GET("/new", ctrl.New)
 		p.POST("/create", ctrl.Create)
 		p.GET("/delete/:id", ctrl.Delete)
-		// p.GET("/:id", ctrl.Show)
+		p.GET("/show/:id", ctrl.Show)
 		// p.PUT("/:id", ctrl.Update)
 		// p.DELETE("/:id", ctrl.Delete)
+	}
+
+	t := router.Group("/tag")
+	{
+		ctrl := ctrl.TagController{}
+		t.GET("/index/:pid", ctrl.Index)
+		t.GET("/new/:pid", ctrl.New)
+		t.POST("/create", ctrl.Create)
+		t.GET("/delete/:id", ctrl.Delete)
 	}
 
 	router.Run()
