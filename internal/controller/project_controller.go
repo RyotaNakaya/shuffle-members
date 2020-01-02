@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/RyotaNakaya/shuffle-members/db"
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
@@ -49,6 +50,27 @@ func (p *ProjectController) Create(ctx *gin.Context) {
 		fmt.Println(err)
 		// TODO: エラーハンドリング
 		ctx.HTML(500, "new.html", gin.H{"Error": err})
+	}
+
+	ctx.Redirect(302, "/project/index")
+}
+
+// Delete はプロジェクトの削除を行います
+func (p *ProjectController) Delete(ctx *gin.Context) {
+	db := db.GetDB()
+
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
+
+	var prj model.Project
+	if err := db.Delete(&prj, id).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
 	}
 
 	ctx.Redirect(302, "/project/index")

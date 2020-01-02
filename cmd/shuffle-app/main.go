@@ -23,6 +23,7 @@ func main() {
 		p.GET("/index", ctrl.Index)
 		p.GET("/new", ctrl.New)
 		p.POST("/create", ctrl.Create)
+		p.GET("/delete/:id", ctrl.Delete)
 		// p.GET("/:id", ctrl.Show)
 		// p.PUT("/:id", ctrl.Update)
 		// p.DELETE("/:id", ctrl.Delete)
