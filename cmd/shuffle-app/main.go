@@ -8,17 +8,27 @@ import (
 )
 
 func main() {
+	// DB セットアップ
 	db.Init()
 	defer db.Close()
 
 	router := gin.Default()
+	// asset の読み込み
 	router.Static("/public", "./public")
+	// template の読み込み
 	router.LoadHTMLGlob("web/template/**/*.html")
 
-	c := ctrl.ProjectController{}
-	router.GET("/", c.Index)
+	// ルーティング
+	router = setRouting(router)
 
-	p := router.Group("/project")
+	router.Run()
+}
+
+func setRouting(r *gin.Engine) *gin.Engine {
+	c := ctrl.ProjectController{}
+	r.GET("/", c.Index)
+
+	p := r.Group("/project")
 	{
 		ctrl := ctrl.ProjectController{}
 		p.GET("/index", ctrl.Index)
@@ -26,11 +36,9 @@ func main() {
 		p.POST("/create", ctrl.Create)
 		p.GET("/delete/:id", ctrl.Delete)
 		p.GET("/show/:id", ctrl.Show)
-		// p.PUT("/:id", ctrl.Update)
-		// p.DELETE("/:id", ctrl.Delete)
 	}
 
-	t := router.Group("/tag")
+	t := r.Group("/tag")
 	{
 		ctrl := ctrl.TagController{}
 		t.GET("/index", ctrl.Index)
@@ -39,5 +47,13 @@ func main() {
 		t.GET("/delete/:id", ctrl.Delete)
 	}
 
-	router.Run()
+	m := r.Group("/member")
+	{
+		ctrl := ctrl.MemberController{}
+		m.GET("/index", ctrl.Index)
+		m.GET("/new", ctrl.New)
+		m.POST("/create", ctrl.Create)
+	}
+
+	return r
 }
