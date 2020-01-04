@@ -26,7 +26,8 @@
                         <tr>
                             <td>{{.Name}}</td>
                             <td>{{.Email}}</td>
-                            <td><a class="btn btn-secondary btn-sm" href="#">削除</a></td>
+                            <td><a class="btn btn-secondary btn-sm"
+                                    href="/member/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
                         </tr>
                         {{end}}
                     </tbody>

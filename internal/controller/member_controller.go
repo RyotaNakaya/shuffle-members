@@ -60,3 +60,25 @@ func (m *MemberController) Create(ctx *gin.Context) {
 
 	ctx.Redirect(302, "/member/index?pid="+pid)
 }
+
+// Delete はメンバーの削除を行います
+func (t *MemberController) Delete(ctx *gin.Context) {
+	db := db.GetDB()
+
+	pid := ctx.Query("pid")
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		// TODO: エラーハンドリング
+		fmt.Println(err)
+		ctx.Redirect(302, "/member/index?pid="+pid)
+	}
+
+	var member model.Member
+	if err := db.Delete(&member, id).Error; err != nil {
+		// TODO: エラーハンドリング
+		fmt.Println(err)
+		ctx.Redirect(302, "/member/index?pid="+pid)
+	}
+
+	ctx.Redirect(302, "/member/index?pid="+pid)
+}
