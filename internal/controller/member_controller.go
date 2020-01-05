@@ -14,7 +14,7 @@ type MemberController struct {
 }
 
 // Index はメンバーの一覧を取得します
-func (t *MemberController) Index(ctx *gin.Context) {
+func (m *MemberController) Index(ctx *gin.Context) {
 	db := db.GetDB()
 
 	pid := ctx.Query("pid")
@@ -29,7 +29,15 @@ func (t *MemberController) Index(ctx *gin.Context) {
 
 // New はメンバーの新規作成画面に遷移します
 func (m *MemberController) New(ctx *gin.Context) {
-	ctx.HTML(200, "member/new.html", gin.H{"PID": ctx.Query("pid")})
+	db := db.GetDB()
+
+	pid := ctx.Query("pid")
+	var Tags []model.Tag
+	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
+		fmt.Println(err)
+	}
+
+	ctx.HTML(200, "member/new.html", gin.H{"PID": pid, "Tags": Tags})
 }
 
 // Create はメンバーの作成を行います
@@ -57,12 +65,16 @@ func (m *MemberController) Create(ctx *gin.Context) {
 		fmt.Println(err)
 		ctx.Redirect(302, "/member/new?pid="+pid)
 	}
+	err = createMemberTag(ctx, pidInt, member.ID)
+	if err != nil {
+		panic("fail createMemberTag")
+	}
 
 	ctx.Redirect(302, "/member/index?pid="+pid)
 }
 
 // Delete はメンバーの削除を行います
-func (t *MemberController) Delete(ctx *gin.Context) {
+func (m *MemberController) Delete(ctx *gin.Context) {
 	db := db.GetDB()
 
 	pid := ctx.Query("pid")
@@ -81,4 +93,32 @@ func (t *MemberController) Delete(ctx *gin.Context) {
 	}
 
 	ctx.Redirect(302, "/member/index?pid="+pid)
+}
+
+func createMemberTag(ctx *gin.Context, pid int, mid int) error {
+	// TODO: ハイパーやっつけ
+	db := db.GetDB()
+	for i := 1; i <= 3; i++ {
+		if tid := ctx.PostForm("tag" + strconv.Itoa(i)); tid != "" {
+			tid, err := strconv.Atoi(tid)
+			weight, err := strconv.Atoi(ctx.PostForm("weight" + strconv.Itoa(i)))
+			if err != nil {
+				// TODO: エラーハンドリング
+				panic("convert fail")
+			}
+			mt := model.MemberTag{
+				ProjectID: pid,
+				MemberID:  mid,
+				TagID:     tid,
+				Weight:    weight,
+			}
+			if err := db.Create(&mt).Error; err != nil {
+				// TODO: エラーハンドリング
+				fmt.Println(err)
+				return (err)
+			}
+		}
+	}
+
+	return nil
 }

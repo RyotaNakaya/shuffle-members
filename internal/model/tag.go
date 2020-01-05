@@ -12,8 +12,3 @@ type Tag struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index" json:"-"`
 }
-
-// FOREIGN KEY (project_id)
-//         references project (id)
-//         on delete restrict
-//         on update restrict

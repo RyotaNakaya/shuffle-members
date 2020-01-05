@@ -22,6 +22,54 @@
                         <label for="email">メールアドレス</label>
                         <input type="email" name="email" class="form-control" placeholder="email">
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="tag1">タグ1</label>
+                            <select name="tag1" class="form-control">
+                                <option></option>
+                                {{range .Tags}}
+                                <option value="{{.ID}}">{{.Name}}</option value="{{.ID}}">
+                                {{end}}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="weight1">ウェイト</label>
+                            <input type="number" name="weight1" max="10" min="0" class="form-control"
+                                placeholder="1~10">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="tag2">タグ2</label>
+                            <select name="tag2" class="form-control">
+                                <option></option>
+                                {{range .Tags}}
+                                <option value="{{.ID}}">{{.Name}}</option value="{{.ID}}">
+                                {{end}}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="weight2">ウェイト</label>
+                            <input type="number" name="weight2" max="10" min="0" class="form-control"
+                                placeholder="1~10">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="tag3">タグ3</label>
+                            <select name="tag3" class="form-control">
+                                <option></option>
+                                {{range .Tags}}
+                                <option value="{{.ID}}">{{.Name}}</option>
+                                {{end}}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="weight3">ウェイト</label>
+                            <input type="number" name="weight3" max="10" min="0" class="form-control"
+                                placeholder="1~10">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <input type="text" name="pid" class="form-control" style="display: none;" value="{{.PID}}">
                     </div>
