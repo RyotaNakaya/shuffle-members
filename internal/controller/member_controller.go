@@ -73,6 +73,34 @@ func (m *MemberController) Create(ctx *gin.Context) {
 	ctx.Redirect(302, "/member/index?pid="+pid)
 }
 
+// Edit はメンバーの編集画面に遷移します
+func (m *MemberController) Edit(ctx *gin.Context) {
+	db := db.GetDB()
+
+	pid := ctx.Query("pid")
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		// TODO: エラーハンドリング
+		fmt.Println(err)
+		ctx.Redirect(302, "/member/index?pid="+pid)
+	}
+
+	var Member model.Member
+	if err := db.Where("id = ?", id).Find(&Member).Error; err != nil {
+		fmt.Println(err)
+	}
+
+	// TODO: MemberTagの取得
+	// Member に []Tag フィールド持たせた方が楽か？
+
+	var Tags []model.Tag
+	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
+		fmt.Println(err)
+	}
+
+	ctx.HTML(200, "member/edit.html", gin.H{"PID": pid, "Member": Member, "Tags": Tags})
+}
+
 // Delete はメンバーの削除を行います
 func (m *MemberController) Delete(ctx *gin.Context) {
 	db := db.GetDB()

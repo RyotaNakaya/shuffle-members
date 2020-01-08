@@ -54,6 +54,7 @@ func setRouting(r *gin.Engine) *gin.Engine {
 		m.GET("/new", ctrl.New)
 		m.POST("/create", ctrl.Create)
 		m.GET("/delete/:id", ctrl.Delete)
+		m.GET("/edit/:id", ctrl.Edit)
 	}
 
 	return r

@@ -19,6 +19,7 @@
                             <th>名称</th>
                             <th>Email</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,6 +27,7 @@
                         <tr>
                             <td>{{.Name}}</td>
                             <td>{{.Email}}</td>
+                            <td><a class="btn btn-secondary btn-sm" href="#">編集</a></td>
                             <td><a class="btn btn-secondary btn-sm"
                                     href="/member/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
                         </tr>
