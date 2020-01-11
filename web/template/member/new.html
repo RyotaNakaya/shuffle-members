@@ -7,9 +7,14 @@
 <body>
     {{template "nav.html"}}
     <div class="container">
-        <h1>
-            メンバー登録
-        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+                <li class="breadcrumb-item"><a href="/project/show/{{.Project.ID}}">{{.Project.Name}}</a></li>
+                <li class="breadcrumb-item"><a href="/member/index?pid={{.Project.ID}}">メンバー一覧</a></li>
+                <li class="breadcrumb-item active" aria-current="page">メンバー作成</li>
+            </ol>
+        </nav>
         <div class="row">
             <div class="col-2"></div>
             <div class="col-8">
@@ -75,7 +80,6 @@
                     </div>
                     <button type="submit" class="btn btn-primary">登録</button>
                 </form>
-                <a class="btn btn-secondary" href="/member/index?pid={{.PID}}">一覧に戻る</a>
             </div>
             <div class="col-2"></div>
         </div>

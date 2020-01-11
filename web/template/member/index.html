@@ -7,9 +7,13 @@
 <body>
     {{template "nav.html"}}
     <div class="container">
-        <h1>
-            メンバー一覧
-        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+                <li class="breadcrumb-item"><a href="/project/show/{{.Project.ID}}">{{.Project.Name}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">メンバー一覧</li>
+            </ol>
+        </nav>
         <div class="row">
             <div class="col-2"></div>
             <div class="col-8">
@@ -36,9 +40,6 @@
                 </table>
                 <div>
                     <a class="btn btn-primary" href="/member/new?pid={{.PID}}">追加</a>
-                </div>
-                <div>
-                    <a class="btn btn-secondary" href="/project/show/{{.PID}}">戻る</a>
                 </div>
             </div>
             <div class="col-2"></div>

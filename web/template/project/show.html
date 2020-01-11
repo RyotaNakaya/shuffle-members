@@ -7,16 +7,18 @@
 <body>
   {{template "nav.html"}}
   <div class="container">
-    <h1>
-      {{.Name}}
-    </h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{.Name}}</li>
+      </ol>
+    </nav>
     <div class="row">
       <div class="col-2"></div>
       <div class="col-8">
         <div>
           <a class="btn btn-outline-primary btn-lg" href="/tag/index?pid={{.ID}}">タグ管理</a>
           <a class="btn btn-outline-primary btn-lg" href="/member/index?pid={{.ID}}">メンバー管理</a>
-          <a class="btn btn-outline-dark btn-lg" href="/project/index">戻る</a>
         </div>
       </div>
       <div class="col-2"></div>

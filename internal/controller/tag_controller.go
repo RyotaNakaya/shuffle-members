@@ -20,20 +20,35 @@ func (t *TagController) Show(ctx *gin.Context) {
 // Index はタグの一覧を取得します
 func (t *TagController) Index(ctx *gin.Context) {
 	db := db.GetDB()
-
 	pid := ctx.Query("pid")
+
+	var Project model.Project
+	if err := db.First(&Project, pid).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
 
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
 		fmt.Println(err)
 	}
 
-	ctx.HTML(200, "tag/index.html", gin.H{"Tags": Tags, "PID": pid})
+	ctx.HTML(200, "tag/index.html", gin.H{"Tags": Tags, "PID": pid, "Project": Project})
 }
 
 // New はタグの新規作成画面に遷移します
 func (t *TagController) New(ctx *gin.Context) {
-	ctx.HTML(200, "tag/new.html", gin.H{"PID": ctx.Query("pid")})
+	db := db.GetDB()
+	pid := ctx.Query("pid")
+
+	var Project model.Project
+	if err := db.First(&Project, pid).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
+	ctx.HTML(200, "tag/new.html", gin.H{"PID": pid, "Project": Project})
 }
 
 // Create はタグの作成を行います

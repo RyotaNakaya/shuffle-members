@@ -7,9 +7,14 @@
 <body>
     {{template "nav.html"}}
     <div class="container">
-        <h1>
-            メンバー編集
-        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+                <li class="breadcrumb-item"><a href="/project/show/{{.Project.ID}}">{{.Project.Name}}</a></li>
+                <li class="breadcrumb-item"><a href="/member/index?pid={{.Project.ID}}">メンバー一覧</a></li>
+                <li class="breadcrumb-item active" aria-current="page">メンバー編集</li>
+            </ol>
+        </nav>
         <div class="row">
             <div class="col-2"></div>
             <div class="col-8">

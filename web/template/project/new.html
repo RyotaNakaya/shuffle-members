@@ -7,9 +7,12 @@
 <body>
   {{template "nav.html"}}
   <div class="container">
-    <h1>
-      プロジェクト作成
-    </h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+        <li class="breadcrumb-item active" aria-current="page">プロジェクト作成</li>
+      </ol>
+    </nav>
     <div class="row">
       <div class="col-2"></div>
       <div class="col-8">
@@ -24,7 +27,6 @@
           </div>
           <button type="submit" class="btn btn-primary">作成</button>
         </form>
-        <a class="btn btn-secondary" href="/project/index">一覧に戻る</a>
       </div>
       <div class="col-2"></div>
     </div>

@@ -16,28 +16,41 @@ type MemberController struct {
 // Index はメンバーの一覧を取得します
 func (m *MemberController) Index(ctx *gin.Context) {
 	db := db.GetDB()
-
 	pid := ctx.Query("pid")
+
+	var Project model.Project
+	if err := db.First(&Project, pid).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
 
 	var Members []model.Member
 	if err := db.Where("project_id = ?", pid).Find(&Members).Error; err != nil {
 		fmt.Println(err)
 	}
 
-	ctx.HTML(200, "member/index.html", gin.H{"Members": Members, "PID": pid})
+	ctx.HTML(200, "member/index.html", gin.H{"Members": Members, "PID": pid, "Project": Project})
 }
 
 // New はメンバーの新規作成画面に遷移します
 func (m *MemberController) New(ctx *gin.Context) {
 	db := db.GetDB()
-
 	pid := ctx.Query("pid")
+
+	var Project model.Project
+	if err := db.First(&Project, pid).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
+
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
 		fmt.Println(err)
 	}
 
-	ctx.HTML(200, "member/new.html", gin.H{"PID": pid, "Tags": Tags})
+	ctx.HTML(200, "member/new.html", gin.H{"PID": pid, "Tags": Tags, "Project": Project})
 }
 
 // Create はメンバーの作成を行います
@@ -76,8 +89,15 @@ func (m *MemberController) Create(ctx *gin.Context) {
 // Edit はメンバーの編集画面に遷移します
 func (m *MemberController) Edit(ctx *gin.Context) {
 	db := db.GetDB()
-
 	pid := ctx.Query("pid")
+
+	var Project model.Project
+	if err := db.First(&Project, pid).Error; err != nil {
+		fmt.Println(err)
+		// TODO: エラーハンドリング
+		ctx.Redirect(302, "/project/index")
+	}
+
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		// TODO: エラーハンドリング
@@ -98,7 +118,7 @@ func (m *MemberController) Edit(ctx *gin.Context) {
 		fmt.Println(err)
 	}
 
-	ctx.HTML(200, "member/edit.html", gin.H{"PID": pid, "Member": Member, "Tags": Tags})
+	ctx.HTML(200, "member/edit.html", gin.H{"PID": pid, "Member": Member, "Tags": Tags, "Project": Project})
 }
 
 // Delete はメンバーの削除を行います
