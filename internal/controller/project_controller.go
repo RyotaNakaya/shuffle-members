@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/RyotaNakaya/shuffle-members/db"
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
@@ -20,6 +19,8 @@ func (p *ProjectController) Index(ctx *gin.Context) {
 
 	if err := db.Find(&Projects).Error; err != nil {
 		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.HTML(200, "project/index.html", Projects)
@@ -29,18 +30,13 @@ func (p *ProjectController) Index(ctx *gin.Context) {
 func (p *ProjectController) Show(ctx *gin.Context) {
 	db := db.GetDB()
 
-	id, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
-	}
+	id := ctx.Param("id")
 
 	var Project model.Project
 	if err := db.First(&Project, id).Error; err != nil {
 		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.HTML(200, "project/show.html", Project)
@@ -65,8 +61,8 @@ func (p *ProjectController) Create(ctx *gin.Context) {
 	}
 	if err := db.Create(&prj).Error; err != nil {
 		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.HTML(500, "project/new.html", gin.H{"Error": err})
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.Redirect(302, "/project/index")
@@ -76,18 +72,13 @@ func (p *ProjectController) Create(ctx *gin.Context) {
 func (p *ProjectController) Delete(ctx *gin.Context) {
 	db := db.GetDB()
 
-	id, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
-	}
+	id := ctx.Param("id")
 
 	var prj model.Project
 	if err := db.Delete(&prj, id).Error; err != nil {
 		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.Redirect(302, "/project/index")

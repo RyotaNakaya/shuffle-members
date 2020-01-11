@@ -21,13 +21,15 @@ func (m *MemberController) Index(ctx *gin.Context) {
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
 		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	var Members []model.Member
 	if err := db.Where("project_id = ?", pid).Find(&Members).Error; err != nil {
 		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.HTML(200, "member/index.html", gin.H{"Members": Members, "PID": pid, "Project": Project})
@@ -41,13 +43,15 @@ func (m *MemberController) New(ctx *gin.Context) {
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
 		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
 		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.HTML(200, "member/new.html", gin.H{"PID": pid, "Tags": Tags, "Project": Project})
@@ -63,9 +67,9 @@ func (m *MemberController) Create(ctx *gin.Context) {
 	pid := ctx.PostForm("pid")
 	pidInt, err := strconv.Atoi(pid)
 	if err != nil {
-		// TODO: エラーハンドリング
 		fmt.Println(err)
-		ctx.Redirect(302, "/member/index?pid="+pid)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	member := model.Member{
@@ -74,9 +78,9 @@ func (m *MemberController) Create(ctx *gin.Context) {
 		Email:     e,
 	}
 	if err := db.Create(&member).Error; err != nil {
-		// TODO: エラーハンドリング
 		fmt.Println(err)
-		ctx.Redirect(302, "/member/new?pid="+pid)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 	err = createMemberTag(ctx, pidInt, member.ID)
 	if err != nil {
@@ -90,24 +94,20 @@ func (m *MemberController) Create(ctx *gin.Context) {
 func (m *MemberController) Edit(ctx *gin.Context) {
 	db := db.GetDB()
 	pid := ctx.Query("pid")
+	id := ctx.Param("id")
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
 		fmt.Println(err)
-		// TODO: エラーハンドリング
-		ctx.Redirect(302, "/project/index")
-	}
-
-	id, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		// TODO: エラーハンドリング
-		fmt.Println(err)
-		ctx.Redirect(302, "/member/index?pid="+pid)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	var Member model.Member
 	if err := db.Where("id = ?", id).Find(&Member).Error; err != nil {
 		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	// TODO: MemberTagの取得
@@ -116,6 +116,8 @@ func (m *MemberController) Edit(ctx *gin.Context) {
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
 		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.HTML(200, "member/edit.html", gin.H{"PID": pid, "Member": Member, "Tags": Tags, "Project": Project})
@@ -126,18 +128,13 @@ func (m *MemberController) Delete(ctx *gin.Context) {
 	db := db.GetDB()
 
 	pid := ctx.Query("pid")
-	id, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		// TODO: エラーハンドリング
-		fmt.Println(err)
-		ctx.Redirect(302, "/member/index?pid="+pid)
-	}
+	id := ctx.Param("id")
 
 	var member model.Member
 	if err := db.Delete(&member, id).Error; err != nil {
-		// TODO: エラーハンドリング
 		fmt.Println(err)
-		ctx.Redirect(302, "/member/index?pid="+pid)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
 	}
 
 	ctx.Redirect(302, "/member/index?pid="+pid)
