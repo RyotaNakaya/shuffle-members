@@ -22,7 +22,6 @@ func Init() {
 	db.AutoMigrate(&model.Project{})
 	db.AutoMigrate(model.Tag{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
 	db.AutoMigrate(model.Member{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
-	db.AutoMigrate(model.MemberTag{}).AddUniqueIndex("project_member_tag_id", "project_id", "member_id", "tag_id").AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT").AddForeignKey("member_id", "members(id)", "RESTRICT", "RESTRICT").AddForeignKey("tag_id", "tags(id)", "RESTRICT", "RESTRICT")
 }
 
 // GetDB は gorm.DB インスタンスを返します

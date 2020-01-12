@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 // Member はメンバーの情報を表します
 type Member struct {
@@ -8,6 +10,7 @@ type Member struct {
 	ProjectID int    `sql:"index"`
 	Name      string `gorm:"unique; not null; size:50;"`
 	Email     string `gorm:"type:varchar(100);unique_index"`
+	Tags      []Tag  `gorm:"many2many:member_tags;association_autoupdate:false"`
 
 	CreatedAt time.Time
 	UpdatedAt time.Time

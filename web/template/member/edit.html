@@ -21,28 +21,26 @@
                 <form method="post" action="/member/update">
                     <div class="form-group">
                         <label for="name">名称</label>
-                        <input type="text" name="name" class="form-control" placeholder="Enter name"
-                            value="{{.Member.Name}}">
+                        <input type="text" name="name" class="form-control" placeholder="Enter name" value="{{.Member.Name}}">
                     </div>
                     <div class="form-group">
                         <label for="email">メールアドレス</label>
-                        <input type="email" name="email" class="form-control" placeholder="email"
-                            value="{{.Member.Email}}">
+                        <input type="email" name="email" class="form-control" placeholder="email" value="{{.Member.Email}}">
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="tag1">タグ1</label>
-                            <select name="tag1" class="form-control" value="{{.Tags}}">
+                            <select name="tag1" class="form-control">
                                 <option></option>
+                                {{$mt1 := 0}}{{if ne (len .Member.Tags) 0}}{{$mt1 = (index .Member.Tags 0).ID }}{{end}}
                                 {{range .Tags}}
-                                <option value="{{.ID}}">{{.Name}}</option value="{{.ID}}">
+                                {{if eq .ID $mt1}}
+                                <option value="{{.ID}}" selected>{{.Name}}</option>
+                                {{else}}
+                                <option value="{{.ID}}">{{.Name}}</option>
+                                {{end}}
                                 {{end}}
                             </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="weight1">ウェイト</label>
-                            <input type="number" name="weight1" max="10" min="0" class="form-control"
-                                placeholder="1~10">
                         </div>
                     </div>
                     <div class="form-row">
@@ -50,15 +48,15 @@
                             <label for="tag2">タグ2</label>
                             <select name="tag2" class="form-control">
                                 <option></option>
+                                {{$mt2 := 0}}{{if ge (len .Member.Tags) 2}}{{$mt2 = (index .Member.Tags 1).ID }}{{end}}
                                 {{range .Tags}}
-                                <option value="{{.ID}}">{{.Name}}</option value="{{.ID}}">
+                                {{if eq .ID $mt2}}
+                                <option value="{{.ID}}" selected>{{.Name}}</option>
+                                {{else}}
+                                <option value="{{.ID}}">{{.Name}}</option>
+                                {{end}}
                                 {{end}}
                             </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="weight2">ウェイト</label>
-                            <input type="number" name="weight2" max="10" min="0" class="form-control"
-                                placeholder="1~10">
                         </div>
                     </div>
                     <div class="form-row">
@@ -66,23 +64,22 @@
                             <label for="tag3">タグ3</label>
                             <select name="tag3" class="form-control">
                                 <option></option>
+                                {{$mt3 := 0}}{{if ge (len .Member.Tags) 3}}{{$mt3 = (index .Member.Tags 3).ID }}{{end}}
                                 {{range .Tags}}
+                                {{if eq .ID $mt3}}
+                                <option value="{{.ID}}" selected>{{.Name}}</option>
+                                {{else}}
                                 <option value="{{.ID}}">{{.Name}}</option>
                                 {{end}}
+                                {{end}}
                             </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="weight3">ウェイト</label>
-                            <input type="number" name="weight3" max="10" min="0" class="form-control"
-                                placeholder="1~10">
                         </div>
                     </div>
                     <div class="form-group">
                         <input type="text" name="pid" class="form-control" style="display: none;" value="{{.PID}}">
                     </div>
-                    <button type="submit" class="btn btn-primary">登録</button>
+                    <button type="submit" class="btn btn-primary">更新</button>
                 </form>
-                <a class="btn btn-secondary" href="/member/index?pid={{.PID}}">一覧に戻る</a>
             </div>
             <div class="col-2"></div>
         </div>

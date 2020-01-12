@@ -31,9 +31,8 @@
                         <tr>
                             <td>{{.Name}}</td>
                             <td>{{.Email}}</td>
-                            <td><a class="btn btn-secondary btn-sm" href="#">編集</a></td>
-                            <td><a class="btn btn-secondary btn-sm"
-                                    href="/member/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
+                            <td><a class="btn btn-secondary btn-sm" href="/member/edit/{{.ID}}?pid={{.ProjectID}}">編集</a></td>
+                            <td><a class="btn btn-secondary btn-sm" href="/member/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
                         </tr>
                         {{end}}
                     </tbody>

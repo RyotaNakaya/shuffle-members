@@ -72,19 +72,30 @@ func (m *MemberController) Create(ctx *gin.Context) {
 		return
 	}
 
+	// TODO: ハイパーやっつけ
+	var t []model.Tag
+	for i := 1; i <= 3; i++ {
+		if tid := ctx.PostForm("tag" + strconv.Itoa(i)); tid != "" {
+			tid, err := strconv.Atoi(tid)
+			if err != nil {
+				fmt.Println(err)
+				ctx.HTML(500, "500.html", gin.H{"Error": err})
+				return
+			}
+			t = append(t, model.Tag{ID: tid})
+		}
+	}
+
 	member := model.Member{
 		ProjectID: pidInt,
 		Name:      n,
 		Email:     e,
+		Tags:      t,
 	}
 	if err := db.Create(&member).Error; err != nil {
 		fmt.Println(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
-	}
-	err = createMemberTag(ctx, pidInt, member.ID)
-	if err != nil {
-		panic("fail createMemberTag")
 	}
 
 	ctx.Redirect(302, "/member/index?pid="+pid)
@@ -104,11 +115,13 @@ func (m *MemberController) Edit(ctx *gin.Context) {
 	}
 
 	var Member model.Member
-	if err := db.Where("id = ?", id).Find(&Member).Error; err != nil {
+	if err := db.Where("id = ?", id).Preload("Tags").Find(&Member).Error; err != nil {
 		fmt.Println(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
+
+	fmt.Printf("%+v", Member)
 
 	// TODO: MemberTagの取得
 	// Member に []Tag フィールド持たせた方が楽か？
@@ -138,32 +151,4 @@ func (m *MemberController) Delete(ctx *gin.Context) {
 	}
 
 	ctx.Redirect(302, "/member/index?pid="+pid)
-}
-
-func createMemberTag(ctx *gin.Context, pid int, mid int) error {
-	// TODO: ハイパーやっつけ
-	db := db.GetDB()
-	for i := 1; i <= 3; i++ {
-		if tid := ctx.PostForm("tag" + strconv.Itoa(i)); tid != "" {
-			tid, err := strconv.Atoi(tid)
-			weight, err := strconv.Atoi(ctx.PostForm("weight" + strconv.Itoa(i)))
-			if err != nil {
-				// TODO: エラーハンドリング
-				panic("convert fail")
-			}
-			mt := model.MemberTag{
-				ProjectID: pid,
-				MemberID:  mid,
-				TagID:     tid,
-				Weight:    weight,
-			}
-			if err := db.Create(&mt).Error; err != nil {
-				// TODO: エラーハンドリング
-				fmt.Println(err)
-				return (err)
-			}
-		}
-	}
-
-	return nil
 }
