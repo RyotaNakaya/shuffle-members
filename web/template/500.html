@@ -1,0 +1,18 @@
+{{ define "500.html" }}
+<!DOCTYPE html>
+<html lang="ja">
+
+{{template "header.html"}}
+
+<body>
+    {{template "nav.html"}}
+    <div class="container">
+        <h1>internal server error</h1>
+        <div>{{.Error}}</div>
+    </div>
+
+    {{template "common_js.html"}}
+</body>
+
+</html>
+{{end}}
