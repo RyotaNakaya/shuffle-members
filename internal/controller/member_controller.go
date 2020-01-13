@@ -121,11 +121,6 @@ func (m *MemberController) Edit(ctx *gin.Context) {
 		return
 	}
 
-	fmt.Printf("%+v", Member)
-
-	// TODO: MemberTagの取得
-	// Member に []Tag フィールド持たせた方が楽か？
-
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
 		fmt.Println(err)
@@ -134,6 +129,52 @@ func (m *MemberController) Edit(ctx *gin.Context) {
 	}
 
 	ctx.HTML(200, "member/edit.html", gin.H{"PID": pid, "Member": Member, "Tags": Tags, "Project": Project})
+}
+
+// Update はメンバー情報の更新を行います
+func (m *MemberController) Update(ctx *gin.Context) {
+	db := db.GetDB()
+	// TODO: バリデーション
+
+	id := ctx.Param("id")
+	member := model.Member{}
+	if err := db.First(&member, id).Error; err != nil {
+		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
+	}
+
+	n := ctx.PostForm("name")
+	e := ctx.PostForm("email")
+	pid := ctx.PostForm("pid")
+	pidInt, err := strconv.Atoi(pid)
+	if err != nil {
+		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
+	}
+
+	// TODO: ハイパーやっつけ
+	var t []model.Tag
+	for i := 1; i <= 3; i++ {
+		if tid := ctx.PostForm("tag" + strconv.Itoa(i)); tid != "" {
+			tid, err := strconv.Atoi(tid)
+			if err != nil {
+				fmt.Println(err)
+				ctx.HTML(500, "500.html", gin.H{"Error": err})
+				return
+			}
+			t = append(t, model.Tag{ID: tid})
+		}
+	}
+
+	db.Model(&member).Updates(model.Member{
+		ProjectID: pidInt,
+		Name:      n,
+		Email:     e,
+	}).Association("Tags").Replace(t)
+
+	ctx.Redirect(302, "/member/index?pid="+pid)
 }
 
 // Delete はメンバーの削除を行います
