@@ -58,5 +58,12 @@ func setRouting(r *gin.Engine) *gin.Engine {
 		m.POST("/update/:id", ctrl.Update)
 	}
 
+	s := r.Group("/shuffle")
+	{
+		ctrl := ctrl.ShuffleController{}
+		s.GET("/index", ctrl.Index)
+		s.POST("/shuffle", ctrl.Shuffle)
+	}
+
 	return r
 }

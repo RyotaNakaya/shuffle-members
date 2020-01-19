@@ -22,6 +22,7 @@ func Init() {
 	db.AutoMigrate(&model.Project{})
 	db.AutoMigrate(model.Tag{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
 	db.AutoMigrate(model.Member{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
+	db.AutoMigrate(model.ShuffleLog{}).AddForeignKey("project_id", "projects(id)", "", "")
 }
 
 // GetDB は gorm.DB インスタンスを返します

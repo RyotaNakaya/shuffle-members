@@ -16,9 +16,12 @@
     <div class="row">
       <div class="col-2"></div>
       <div class="col-8">
+        <h1>{{.Name}}</h1>
+        <h3>{{.Description}}</h3>
         <div>
-          <a class="btn btn-outline-primary btn-lg" href="/tag/index?pid={{.ID}}">タグ管理</a>
-          <a class="btn btn-outline-primary btn-lg" href="/member/index?pid={{.ID}}">メンバー管理</a>
+          <a class="btn btn-primary btn-lg" href="/shuffle/index?pid={{.ID}}">シャッフル</a>
+          <a class="btn btn-primary btn-lg" href="/member/index?pid={{.ID}}">メンバー管理</a>
+          <a class="btn btn-primary btn-lg" href="/tag/index?pid={{.ID}}">タグ管理</a>
         </div>
       </div>
       <div class="col-2"></div>

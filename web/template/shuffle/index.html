@@ -1,0 +1,64 @@
+{{ define "shuffle/index.html" }}
+<!DOCTYPE html>
+<html lang="ja">
+
+{{template "header.html"}}
+
+<body>
+    {{template "nav.html"}}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+                <li class="breadcrumb-item"><a href="/project/show/{{.Project.ID}}">{{.Project.Name}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">シャッフル</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <form method="post" action="/shuffle/shuffle">
+                    <div class="form-group">
+                        <label for="gcount">グループ数</label>
+                        <input type="number" name="gcount" class="form-control" placeholder="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="mcount">人数(1グループ当たり)</label>
+                        <input type="number" name="mcount" class="form-control" placeholder="4">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="pid" class="form-control" style="display: none;" value="{{.Project.ID}}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">シャッフル</button>
+                </form>
+                <h3 style="margin-top: 40px;">シャッフル履歴</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>シャッフル日付</th>
+                            <th>メンバー</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .Logs}}
+                        <tr>
+                            <td>{{.CreatedAt}}</td>
+                            <td>
+                                {{range .Members}}
+                                {{.Name}}</br>
+                                {{end}}
+                            </td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+
+    {{template "common_js.html"}}
+</body>
+
+</html>
+{{end}}
