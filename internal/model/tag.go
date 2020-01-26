@@ -4,7 +4,7 @@ import "time"
 
 // Tag はタグの情報を表します
 type Tag struct {
-	ID        int    `gorm:"primary_key; AUTO_INCREMENT" json:"id"`
+	ID        int    `gorm:"primary_key; AUTO_INCREMENT"`
 	ProjectID int    `sql:"index"`
 	Name      string `gorm:"unique; not null; size:50;"`
 

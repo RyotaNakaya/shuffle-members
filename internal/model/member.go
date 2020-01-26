@@ -6,7 +6,7 @@ import (
 
 // Member はメンバーの情報を表します
 type Member struct {
-	ID        int    `gorm:"primary_key; AUTO_INCREMENT" json:"id"`
+	ID        int    `gorm:"primary_key; AUTO_INCREMENT"`
 	ProjectID int    `sql:"index"`
 	Name      string `gorm:"unique; not null; size:50;"`
 	Email     string `gorm:"type:varchar(100);unique_index"`
