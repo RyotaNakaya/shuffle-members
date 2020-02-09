@@ -27,7 +27,7 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 		return
 	}
 
-	pid, err := strconv.Atoi(ctx.PostForm("id"))
+	pid, err := strconv.Atoi(ctx.PostForm("pid"))
 	gcount, err := strconv.Atoi(ctx.PostForm("gcount"))
 	mcount, err := strconv.Atoi(ctx.PostForm("mcount"))
 	// 雑
@@ -38,7 +38,7 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 	}
 
 	service := service.ShuffleService{}
-	Members, err := service.Shuffle(pid, gcount, mcount)
+	ShuffleLogDetail, err := service.Shuffle(pid, gcount, mcount)
 	if err != nil {
 		fmt.Println(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
@@ -46,11 +46,11 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 	}
 
 	// ログインサート
-	log := model.ShuffleLog{
-		ProjectID:   pid,
-		GroupCount:  gcount,
-		MemberCount: mcount,
-		Members:     Members,
+	log := model.ShuffleLogHead{
+		ProjectID:        pid,
+		GroupCount:       gcount,
+		MemberCount:      mcount,
+		ShuffleLogDetail: ShuffleLogDetail,
 	}
 	if err := db.Create(&log).Error; err != nil {
 		fmt.Println(err)
@@ -59,14 +59,13 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 	}
 
 	// 雑にリダイレクト
-	ctx.Redirect(302, "/shuffle/index")
+	ctx.Redirect(302, "/shuffle/index?pid="+ctx.PostForm("pid"))
 }
 
 // Index はシャッフル結果の一覧を取得します
 func (s *ShuffleController) Index(ctx *gin.Context) {
 	db := db.GetDB()
-
-	pid := ctx.Param("id")
+	pid := ctx.Query("pid")
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
@@ -75,8 +74,8 @@ func (s *ShuffleController) Index(ctx *gin.Context) {
 		return
 	}
 
-	var Logs []model.ShuffleLog
-	if err := db.Where("project_id = ?", pid).Find(&Logs).Error; err != nil {
+	var Logs []model.ShuffleLogHead
+	if err := db.Debug().Where("project_id = ?", pid).Preload("ShuffleLogDetail").Find(&Logs).Error; err != nil {
 		fmt.Println(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
