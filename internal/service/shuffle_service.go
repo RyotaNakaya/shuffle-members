@@ -1,7 +1,10 @@
 package service
 
 import (
+	"errors"
 	"fmt"
+	"math/rand"
+	"sort"
 
 	"github.com/RyotaNakaya/shuffle-members/db"
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
@@ -15,18 +18,21 @@ type ShuffleService struct {
 func (s *ShuffleService) Shuffle(pid, gcount, mcount int) ([]model.ShuffleLogDetail, error) {
 	db := db.GetDB()
 
-	// そのプロジェクトに紐付くシャッフルログのヘッダとディテールを取得する
-	var log []model.ShuffleLogHead
-	if err := db.Debug().Where("project_id = ?", pid).Preload("ShuffleLogDetail").Find(&log).Error; err != nil {
+	// そのプロジェクトに紐付くMemberの一覧を取得する
+	var members []model.Member
+	if err := db.Where("project_id = ?", pid).Preload("ShuffleLogDetail").Find(&members).Error; err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	fmt.Println(log)
+	// 今回のシャッフル対象者リストを作る
+	targetMemberList := makeTargetMemberList(members, gcount*mcount)
+	if len(targetMemberList) != gcount*mcount {
+		fmt.Printf("シャッフル対象者リストの数がおかしい expect: %d, return: %d", gcount*mcount, len(targetMemberList))
+		return nil, errors.New("シャッフル対象者リストの抽出で問題が発生しました")
+	}
 
-	// 回数を数えて最小回数の人たちを取得
-	// detail のメンバーIDのSUMを取得し、一番少ないメンバーのリストを取得
-	// タグを考慮してシャッフルする
+	// TODO: タグを考慮してシャッフルする
 	// 一人目のタグの人を除外
 	// 二人目を決める
 	// 以下ループ
@@ -34,11 +40,72 @@ func (s *ShuffleService) Shuffle(pid, gcount, mcount int) ([]model.ShuffleLogDet
 	// 既にアサイン済みのIDは除いて最小回数の人たちを取得
 	// タグを考慮してシャッフルしてappendする
 
-	// m := []model.Member{}
-	m := []model.ShuffleLogDetail{}
-	m1 := model.ShuffleLogDetail{MemberID: 1}
-	m2 := model.ShuffleLogDetail{MemberID: 2}
-	m = append(m, m1)
-	m = append(m, m2)
-	return m, nil
+	d := []model.ShuffleLogDetail{}
+	group := 1
+	counter := 0
+	for k := range targetMemberList {
+		detail := model.ShuffleLogDetail{
+			Group:    group,
+			MemberID: targetMemberList[k],
+		}
+		d = append(d, detail)
+
+		counter++
+		if counter == mcount {
+			group++
+			counter = 0
+		}
+	}
+
+	return d, nil
+}
+
+func makeTargetMemberList(members []model.Member, length int) []int {
+	// シャッフルログからメンバーIDとシャッフル回数のマップを作る
+	memberCountMap := map[int]int{}
+	for _, m := range members {
+		memberCountMap[m.ID] = len(m.ShuffleLogDetail)
+	}
+
+	// 回数とメンバーIDのマップの配列を作る
+	countMembersMap := map[int][]int{}
+	for user, count := range memberCountMap {
+		v, _ := countMembersMap[count]
+		countMembersMap[count] = append(v, user)
+	}
+
+	// 当選回数でソートされた配列を作る
+	var keys []int
+	for key := range countMembersMap {
+		keys = append(keys, key)
+	}
+	sort.Ints(keys)
+
+	// 回数の少ない人から抽出していって、今回の対象者リストを作る
+	var targetMemberList []int
+	for _, key := range keys {
+		if len(targetMemberList) >= length {
+			break
+		}
+
+		members := countMembersMap[key]
+		shuffleSlice(members)
+		for _, m := range members {
+			if len(targetMemberList) >= length {
+				break
+			}
+			targetMemberList = append(targetMemberList, m)
+		}
+	}
+
+	return targetMemberList
+}
+
+// スライスをシャッフルして返す
+func shuffleSlice(data []int) {
+	n := len(data)
+	for i := n - 1; i >= 0; i-- {
+		j := rand.Intn(i + 1)
+		data[i], data[j] = data[j], data[i]
+	}
 }
