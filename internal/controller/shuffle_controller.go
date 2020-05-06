@@ -73,6 +73,12 @@ func (s *ShuffleController) Index(ctx *gin.Context) {
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
+	var member []model.Member
+	if err := db.Where("project_id = ?", pid).Find(&member).Error; err != nil {
+		fmt.Println(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
+	}
 
 	var Logs []model.ShuffleLogHead
 	if err := db.Debug().Where("project_id = ?", pid).Preload("ShuffleLogDetail").Find(&Logs).Error; err != nil {
@@ -81,5 +87,30 @@ func (s *ShuffleController) Index(ctx *gin.Context) {
 		return
 	}
 
-	ctx.HTML(200, "shuffle/index.html", gin.H{"Logs": Logs, "Project": Project})
+	// シャッフルログを表示用に整形する
+	// TODO: map　だと表示順を担保できない
+	Result := map[string]map[int][]string{}
+	for _, head := range Logs {
+		m := map[int][]string{}
+		for _, detail := range head.ShuffleLogDetail {
+			v, _ := m[detail.Group]
+			m[detail.Group] = append(v, memberNameByID(member, detail.MemberID))
+		}
+		Result[head.CreatedAt.Format("2006-01-02T15:04")] = m
+	}
+
+	ctx.HTML(200, "shuffle/index.html", gin.H{"Result": Result, "Project": Project})
+}
+
+// メンバーIDに該当するメンバー名称を返す、存在しない場合はIDを返す
+// TODO: これアソシエーションうまく使ってもっとスマートにやりたい
+func memberNameByID(m []model.Member, id int) string {
+	res := strconv.Itoa(id)
+	for _, v := range m {
+		if v.ID == id {
+			res = v.Name
+			break
+		}
+	}
+	return res
 }

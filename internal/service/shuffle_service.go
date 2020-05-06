@@ -25,6 +25,10 @@ func (s *ShuffleService) Shuffle(pid, gcount, mcount int) ([]model.ShuffleLogDet
 		return nil, err
 	}
 
+	if gcount*mcount > len(members) {
+		return nil, errors.New("入力された対象人数が多すぎます")
+	}
+
 	// 今回のシャッフル対象者リストを作る
 	targetMemberList := makeTargetMemberList(members, gcount*mcount)
 	if len(targetMemberList) != gcount*mcount {
