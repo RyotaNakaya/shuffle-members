@@ -26,7 +26,7 @@ func (m *MemberController) Index(ctx *gin.Context) {
 	}
 
 	var Members []model.Member
-	if err := db.Where("project_id = ?", pid).Find(&Members).Error; err != nil {
+	if err := db.Where("project_id = ?", pid).Preload("Tags").Find(&Members).Error; err != nil {
 		fmt.Println(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return

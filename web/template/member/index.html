@@ -15,13 +15,16 @@
             </ol>
         </nav>
         <div class="row">
-            <div class="col-2"></div>
-            <div class="col-8">
+            <div class="col-1"></div>
+            <div class="col-10">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>名称</th>
                             <th>Email</th>
+                            <th>タグ1</th>
+                            <th>タグ2</th>
+                            <th>タグ3</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -31,6 +34,9 @@
                         <tr>
                             <td>{{.Name}}</td>
                             <td>{{.Email}}</td>
+                            <td>{{if gt (len .Tags) 0}}{{(index .Tags 0).Name}}{{end}}</td>
+                            <td>{{if gt (len .Tags) 1}}{{(index .Tags 1).Name}}{{end}}</td>
+                            <td>{{if gt (len .Tags) 2}}{{(index .Tags 2).Name}}{{end}}</td>
                             <td><a class="btn btn-secondary btn-sm" href="/member/edit/{{.ID}}?pid={{.ProjectID}}">編集</a></td>
                             <td><a class="btn btn-secondary btn-sm" href="/member/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
                         </tr>
@@ -41,7 +47,7 @@
                     <a class="btn btn-primary" href="/member/new?pid={{.PID}}">追加</a>
                 </div>
             </div>
-            <div class="col-2"></div>
+            <div class="col-1"></div>
         </div>
     </div>
 
