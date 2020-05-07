@@ -17,11 +17,28 @@
       <div class="col-1"></div>
       <div class="col-10">
         <h1>{{.Name}}</h1>
-        <h3>{{.Description}}</h3>
-        <div>
-          <a class="btn btn-primary btn-lg" href="/shuffle/index?pid={{.ID}}">シャッフル</a>
-          <a class="btn btn-primary btn-lg" href="/member/index?pid={{.ID}}">メンバー管理</a>
-          <a class="btn btn-primary btn-lg" href="/tag/index?pid={{.ID}}">タグ管理</a>
+        <h4>{{.Description}}</h4>
+        <div style="margin-top: 32px;">
+          <div class="card-deck">
+            <a href="/shuffle/index?pid={{.ID}}" class="card border-info fly" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">シャッフル</h5>
+                <h6 class="card-subtitle mb-2 text-muted">シャッフルを行います</h6>
+              </div>
+            </a>
+            <a href="/member/index?pid={{.ID}}" class="card border-info fly" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">メンバー管理</h5>
+                <h6 class="card-subtitle mb-2 text-muted">メンバーの追加や編集を行います</h6>
+              </div>
+            </a>
+            <a href="/tag/index?pid={{.ID}}" class="card border-info fly" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">タグ管理</h5>
+                <h6 class="card-subtitle mb-2 text-muted">タグの管理を行います</h6>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
       <div class="col-1"></div>
