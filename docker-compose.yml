@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+    #   - ./sqls/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: shuffle_members_development
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
+    restart: always
+
+  app:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_DB_HOST: db
+      MYSQL_DB: shuffle_members_development
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
+    restart: always
+
+volumes:
+  mysql_data:

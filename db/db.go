@@ -22,8 +22,8 @@ func Init() {
 	db.AutoMigrate(&model.Project{})
 	db.AutoMigrate(model.Tag{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
 	db.AutoMigrate(model.Member{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
-	db.AutoMigrate(model.ShuffleLogHead{}).AddForeignKey("project_id", "projects(id)", "", "")
-	db.AutoMigrate(model.ShuffleLogDetail{}).AddForeignKey("shuffle_log_head_id", "shuffle_log_heads(id)", "", "")
+	db.AutoMigrate(model.ShuffleLogHead{}).AddForeignKey("project_id", "projects(id)", "RESTRICT", "RESTRICT")
+	db.AutoMigrate(model.ShuffleLogDetail{}).AddForeignKey("shuffle_log_head_id", "shuffle_log_heads(id)", "RESTRICT", "RESTRICT")
 }
 
 // GetDB は gorm.DB インスタンスを返します
@@ -43,7 +43,7 @@ func getDBConfig() (string, string) {
 	DBMS := "mysql"
 	USER := "root"
 	PASS := ""
-	PROTOCOL := ""
+	PROTOCOL := "tcp(docker.for.mac.localhost:3306)"
 	DBNAME := "shuffle_members_development"
 	OPTION := "charset=utf8mb4&parseTime=True&loc=Local"
 
