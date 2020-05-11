@@ -1,6 +1,8 @@
 package db
 
 import (
+	"os"
+
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql" // Use mysql in gorm
@@ -39,12 +41,11 @@ func Close() {
 }
 
 func getDBConfig() (string, string) {
-	// TODO: 設定ファイルから読み込む
 	DBMS := "mysql"
-	USER := "root"
-	PASS := ""
-	PROTOCOL := "tcp(docker.for.mac.localhost:3306)"
-	DBNAME := "shuffle_members_development"
+	USER := os.Getenv("MYSQL_USER")
+	PASS := os.Getenv("MYSQL_PASSWORD")
+	PROTOCOL := os.Getenv("MYSQL_DB_HOST")
+	DBNAME := os.Getenv("MYSQL_DB")
 	OPTION := "charset=utf8mb4&parseTime=True&loc=Local"
 
 	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?" + OPTION
