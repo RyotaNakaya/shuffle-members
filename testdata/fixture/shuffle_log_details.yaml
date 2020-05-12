@@ -1,0 +1,19 @@
+- id: 1
+  shuffle_log_head_id: 1
+  group: 1
+  member_id: 1
+
+- id: 2
+  shuffle_log_head_id: 1
+  group: 1
+  member_id: 2
+
+- id: 3
+  shuffle_log_head_id: 1
+  group: 2
+  member_id: 3
+
+- id: 4
+  shuffle_log_head_id: 1
+  group: 2
+  member_id: 4

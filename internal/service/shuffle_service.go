@@ -107,17 +107,12 @@ func groupingMember(members []*model.Member, gcount, mcount int) map[int][]model
 	result := map[int][]model.Member{}
 
 	for i := 1; i <= gcount; i++ {
-		fmt.Println("gcountの")
-		fmt.Println(i)
 		var m []model.Member
 		var tags []model.Tag
 
 		for i := 1; len(m) < mcount; i++ {
-			fmt.Println("mcountの")
-			fmt.Println(i)
 			var target *model.Member
-			// 対象を取り出す(popするけどcontinueの可能性もあるので、membersを更新しない)
-			target, _ = pop(members)
+			target, members = members[0], members[1:]
 
 			// タグ重複がないかチェック
 			targetTags := target.Tags
@@ -131,11 +126,11 @@ func groupingMember(members []*model.Member, gcount, mcount int) map[int][]model
 
 			// ループしきってないかつタグ重複の時はcontinue
 			if i <= len(members) && b == true {
+				// 列の後ろにpushして戻す
+				members = append(members, target)
 				continue
 			}
 
-			// membersを更新するためのpop
-			target, members = pop(members)
 			for _, v := range targetTags {
 				tags = append(tags, v)
 			}
@@ -145,12 +140,6 @@ func groupingMember(members []*model.Member, gcount, mcount int) map[int][]model
 		result[i] = m
 	}
 	return result
-}
-
-func pop(slice []*model.Member) (*model.Member, []*model.Member) {
-	ans := slice[len(slice)-1]
-	slice = slice[:len(slice)-1]
-	return ans, slice
 }
 
 func contains(s []model.Tag, e model.Tag) bool {

@@ -1,0 +1,7 @@
+- id: 1
+  project_id: 1
+  name: tag1
+
+- id: 2
+  project_id: 1
+  name: tag2
