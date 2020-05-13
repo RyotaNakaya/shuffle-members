@@ -1,0 +1,40 @@
+{{ define "tag/edit.html" }}
+<!DOCTYPE html>
+<html lang="ja">
+
+{{template "header.html"}}
+
+<body>
+    {{template "nav.html"}}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+                <li class="breadcrumb-item"><a href="/project/show/{{.Project.ID}}">{{.Project.Name}}</a></li>
+                <li class="breadcrumb-item"><a href="/tag/index?pid={{.Project.ID}}">タグ一覧</a></li>
+                <li class="breadcrumb-item active" aria-current="page">タグ編集</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <form method="post" action="/tag/update/{{.Tag.ID}}">
+                    <div class="form-group">
+                        <label for="name">名称</label>
+                        <input type="text" name="name" class="form-control" placeholder="Enter name" value="{{.Tag.Name}}">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="pid" class="form-control" style="display: none;" value="{{.PID}}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">更新</button>
+                </form>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+
+    {{template "common_js.html"}}
+</body>
+
+</html>
+{{end}}

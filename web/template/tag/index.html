@@ -23,6 +23,7 @@
               <th>名称</th>
               <th>作成日</th>
               <th></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -30,6 +31,7 @@
             <tr>
               <td>{{.Name}}</td>
               <td>{{.CreatedAt}}</td>
+              <td><a class="btn btn-secondary btn-sm" href="/tag/edit/{{.ID}}?pid={{.ProjectID}}">編集</a></td>
               <td><a class="btn btn-secondary btn-sm" href="/tag/delete/{{.ID}}?pid={{.ProjectID}}">削除</a></td>
             </tr>
             {{end}}
