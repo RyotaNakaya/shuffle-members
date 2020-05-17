@@ -43,14 +43,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{range $k, $v := .Result}}
+                        {{range $key := .ResultKeys}}
                         <tr>
-                            <td>{{$k}}</td>
+                            <td>{{$key}}</td>
                             <td>
-                                {{range $k2, $v2 := $v}}
-                                グループ{{$k2}}[
-                                {{range $v2}}
-                                {{.}},
+                                {{range $k, $v := index $.Result $key}}
+                                グループ{{$k}}[
+                                {{range $v2 := $v}}
+                                {{$v2}}
                                 {{end}}]</br>
                                 {{end}}
                             </td>

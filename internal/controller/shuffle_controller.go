@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
@@ -88,18 +89,24 @@ func (s *ShuffleController) Index(ctx *gin.Context) {
 	}
 
 	// シャッフルログを表示用に整形する
-	// TODO: map　だと表示順を担保できない
+	// 表示内容用のmap
 	Result := map[string]map[int][]string{}
+	// 表示順を保持した配列
+	ResultKeys := []string{}
 	for _, head := range Logs {
 		m := map[int][]string{}
 		for _, detail := range head.ShuffleLogDetail {
 			v, _ := m[detail.Group]
 			m[detail.Group] = append(v, memberNameByID(member, detail.MemberID))
 		}
-		Result[head.CreatedAt.Format("2006-01-02T15:04")] = m
+		c := head.CreatedAt.Format("2006-01-02T15:04")
+		Result[c] = m
+		ResultKeys = append(ResultKeys, c)
 	}
 
-	ctx.HTML(200, "shuffle/index.html", gin.H{"Result": Result, "Project": Project})
+	sort.Sort(sort.Reverse(sort.StringSlice(ResultKeys)))
+
+	ctx.HTML(200, "shuffle/index.html", gin.H{"Result": Result, "ResultKeys": ResultKeys, "Project": Project})
 }
 
 // メンバーIDに該当するメンバー名称を返す、存在しない場合はIDを返す
