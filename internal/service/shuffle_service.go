@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"sort"
 
@@ -21,7 +22,7 @@ func (s *ShuffleService) Shuffle(pid, gcount, mcount int) ([]model.ShuffleLogDet
 	// そのプロジェクトに紐付くMemberの一覧を取得する
 	var members []*model.Member
 	if err := db.Where("project_id = ?", pid).Preload("ShuffleLogDetail").Preload("Tags").Find(&members).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return nil, err
 	}
 

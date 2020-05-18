@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/RyotaNakaya/shuffle-members/db"
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
@@ -18,7 +18,7 @@ func (p *ProjectController) Index(ctx *gin.Context) {
 	var Projects []model.Project
 
 	if err := db.Find(&Projects).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -34,7 +34,7 @@ func (p *ProjectController) Show(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, id).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -60,7 +60,7 @@ func (p *ProjectController) Create(ctx *gin.Context) {
 		Description: d,
 	}
 	if err := db.Create(&prj).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -76,7 +76,7 @@ func (p *ProjectController) Delete(ctx *gin.Context) {
 
 	var prj model.Project
 	if err := db.Delete(&prj, id).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}

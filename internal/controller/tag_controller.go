@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/RyotaNakaya/shuffle-members/db"
@@ -24,14 +24,14 @@ func (t *TagController) Index(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -46,7 +46,7 @@ func (t *TagController) New(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -63,7 +63,7 @@ func (t *TagController) Create(ctx *gin.Context) {
 	pid := ctx.PostForm("pid")
 	pidInt, err := strconv.Atoi(pid)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -73,7 +73,7 @@ func (t *TagController) Create(ctx *gin.Context) {
 		ProjectID: pidInt,
 	}
 	if err := db.Create(&tag).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -89,14 +89,14 @@ func (t *TagController) Edit(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Tag model.Tag
 	if err := db.Where("id = ?", id).Find(&Tag).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -112,7 +112,7 @@ func (t *TagController) Update(ctx *gin.Context) {
 	id := ctx.Param("id")
 	tag := model.Tag{}
 	if err := db.First(&tag, id).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -121,7 +121,7 @@ func (t *TagController) Update(ctx *gin.Context) {
 	pid := ctx.PostForm("pid")
 	pidInt, err := strconv.Atoi(pid)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -143,7 +143,7 @@ func (t *TagController) Delete(ctx *gin.Context) {
 
 	var tag model.Tag
 	if err := db.Delete(&tag, id).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}

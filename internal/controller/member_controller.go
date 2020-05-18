@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/RyotaNakaya/shuffle-members/db"
@@ -20,14 +20,14 @@ func (m *MemberController) Index(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Members []model.Member
 	if err := db.Where("project_id = ?", pid).Preload("Tags").Find(&Members).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -42,14 +42,14 @@ func (m *MemberController) New(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -67,7 +67,7 @@ func (m *MemberController) Create(ctx *gin.Context) {
 	pid := ctx.PostForm("pid")
 	pidInt, err := strconv.Atoi(pid)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -78,7 +78,7 @@ func (m *MemberController) Create(ctx *gin.Context) {
 		if tid := ctx.PostForm("tag" + strconv.Itoa(i)); tid != "" {
 			tid, err := strconv.Atoi(tid)
 			if err != nil {
-				fmt.Println(err)
+				log.Print(err)
 				ctx.HTML(500, "500.html", gin.H{"Error": err})
 				return
 			}
@@ -93,7 +93,7 @@ func (m *MemberController) Create(ctx *gin.Context) {
 		Tags:      t,
 	}
 	if err := db.Create(&member).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -109,21 +109,21 @@ func (m *MemberController) Edit(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Member model.Member
 	if err := db.Where("id = ?", id).Preload("Tags").Find(&Member).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Tags []model.Tag
 	if err := db.Where("project_id = ?", pid).Find(&Tags).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -139,7 +139,7 @@ func (m *MemberController) Update(ctx *gin.Context) {
 	id := ctx.Param("id")
 	member := model.Member{}
 	if err := db.First(&member, id).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -149,7 +149,7 @@ func (m *MemberController) Update(ctx *gin.Context) {
 	pid := ctx.PostForm("pid")
 	pidInt, err := strconv.Atoi(pid)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -160,7 +160,7 @@ func (m *MemberController) Update(ctx *gin.Context) {
 		if tid := ctx.PostForm("tag" + strconv.Itoa(i)); tid != "" {
 			tid, err := strconv.Atoi(tid)
 			if err != nil {
-				fmt.Println(err)
+				log.Print(err)
 				ctx.HTML(500, "500.html", gin.H{"Error": err})
 				return
 			}
@@ -186,7 +186,7 @@ func (m *MemberController) Delete(ctx *gin.Context) {
 
 	var member model.Member
 	if err := db.Delete(&member, id).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}

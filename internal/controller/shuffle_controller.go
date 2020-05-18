@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"log"
 	"sort"
 	"strconv"
 
@@ -33,7 +33,7 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 	mcount, err := strconv.Atoi(ctx.PostForm("mcount"))
 	// 雑
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -41,7 +41,7 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 	service := service.ShuffleService{}
 	ShuffleLogDetail, err := service.Shuffle(pid, gcount, mcount)
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -54,7 +54,7 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 		ShuffleLogDetail: ShuffleLogDetail,
 	}
 	if err := db.Create(&log).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
@@ -70,20 +70,20 @@ func (s *ShuffleController) Index(ctx *gin.Context) {
 
 	var Project model.Project
 	if err := db.First(&Project, pid).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 	var member []model.Member
 	if err := db.Where("project_id = ?", pid).Find(&member).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
 
 	var Logs []model.ShuffleLogHead
 	if err := db.Debug().Where("project_id = ?", pid).Preload("ShuffleLogDetail").Find(&Logs).Error; err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
 	}
