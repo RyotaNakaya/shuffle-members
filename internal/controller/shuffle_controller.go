@@ -47,13 +47,13 @@ func (s *ShuffleController) Shuffle(ctx *gin.Context) {
 	}
 
 	// ログインサート
-	log := model.ShuffleLogHead{
+	slog := model.ShuffleLogHead{
 		ProjectID:        pid,
 		GroupCount:       gcount,
 		MemberCount:      mcount,
 		ShuffleLogDetail: ShuffleLogDetail,
 	}
-	if err := db.Create(&log).Error; err != nil {
+	if err := db.Create(&slog).Error; err != nil {
 		log.Print(err)
 		ctx.HTML(500, "500.html", gin.H{"Error": err})
 		return
