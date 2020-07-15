@@ -19,5 +19,6 @@ FROM alpine:3.10
 COPY --from=builder /shuffle-members/server /app
 # TODO: テンプレートファイルも実行バイナリに含めてしまいたい
 COPY --from=builder /shuffle-members/web/ /web
+COPY --from=builder /shuffle-members/public/ /public
 EXPOSE 50051
 ENTRYPOINT ["/app"]
