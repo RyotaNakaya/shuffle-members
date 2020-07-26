@@ -67,5 +67,11 @@ func setRouting(r *gin.Engine) *gin.Engine {
 		s.POST("/shuffle", ctrl.Shuffle)
 	}
 
+	lm := r.Group("/log_management")
+	{
+		ctrl := ctrl.LogManagementController{}
+		lm.GET("/index", ctrl.Index)
+	}
+
 	return r
 }

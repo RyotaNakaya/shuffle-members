@@ -1,0 +1,52 @@
+{{ define "log_management/index.html" }}
+<!DOCTYPE html>
+<html lang="ja">
+
+{{template "header.html"}}
+
+<body>
+    {{template "nav.html"}}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/project/index">プロジェクト一覧</a></li>
+                <li class="breadcrumb-item"><a href="/project/show/{{.Project.ID}}">{{.Project.Name}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">シャッフルログ管理</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+                <h3 style="margin-top: 40px;">シャッフル履歴</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ShuffleLogHeadID</th>
+                            <th>ShuffleLogDetailID</th>
+                            <th>Group</th>
+                            <th>MemberID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range $log := .Logs}}
+                        {{range $detail := .ShuffleLogDetail}}
+                        <tr>
+                            <td>{{$detail.ShuffleLogHeadID}}</td>
+                            <td>{{$detail.ID}}</td>
+                            <td>{{$detail.Group}}</td>
+                            <td>{{$detail.MemberID}}</td>
+                        </tr>
+                        {{end}}
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-1"></div>
+        </div>
+    </div>
+
+    {{template "common_js.html"}}
+</body>
+
+</html>
+{{end}}
