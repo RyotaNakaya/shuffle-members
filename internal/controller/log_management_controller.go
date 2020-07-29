@@ -2,6 +2,7 @@ package controller
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/RyotaNakaya/shuffle-members/internal/model"
 	"github.com/gin-gonic/gin"
@@ -65,34 +66,34 @@ func (lm *LogManagementController) Edit(ctx *gin.Context) {
 }
 
 // Update はシャッフルログ詳細の更新を行います
-// func (lm *LogManagementController) Update(ctx *gin.Context) {
-// db := db.GetDB()
-// // TODO: バリデーション
+func (lm *LogManagementController) Update(ctx *gin.Context) {
+	db := db.GetDB()
+	// TODO: バリデーション
 
-// id := ctx.Param("id")
-// tag := model.Tag{}
-// if err := db.First(&tag, id).Error; err != nil {
-// 	log.Print(err)
-// 	ctx.HTML(500, "500.html", gin.H{"Error": err})
-// 	return
-// }
+	id := ctx.Param("id")
+	var logDetail model.ShuffleLogDetail
+	if err := db.First(&logDetail, id).Error; err != nil {
+		log.Print(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
+	}
 
-// n := ctx.PostForm("name")
-// pid := ctx.PostForm("pid")
-// pidInt, err := strconv.Atoi(pid)
-// if err != nil {
-// 	log.Print(err)
-// 	ctx.HTML(500, "500.html", gin.H{"Error": err})
-// 	return
-// }
+	pid := ctx.PostForm("pid")
+	g, err := strconv.Atoi(ctx.PostForm("group"))
+	m, err := strconv.Atoi(ctx.PostForm("member_id"))
+	if err != nil {
+		log.Print(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
+	}
 
-// db.Model(&tag).Updates(model.Tag{
-// 	ProjectID: pidInt,
-// 	Name:      n,
-// })
+	db.Model(&logDetail).Updates(model.ShuffleLogDetail{
+		Group:    g,
+		MemberID: m,
+	})
 
-// ctx.Redirect(302, "/tag/index?pid="+pid)
-// }
+	ctx.Redirect(302, "/log_management/index?pid="+pid)
+}
 
 // Delete はシャッフルログ詳細の削除を行います
 // func (lm *LogManagementController) Delete(ctx *gin.Context) {
