@@ -71,6 +71,7 @@ func setRouting(r *gin.Engine) *gin.Engine {
 	{
 		ctrl := ctrl.LogManagementController{}
 		lm.GET("/index", ctrl.Index)
+		lm.GET("/edit/:id", ctrl.Edit)
 	}
 
 	return r
