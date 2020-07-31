@@ -11,6 +11,8 @@ type ShuffleLogHead struct {
 	ShuffleLogDetail []ShuffleLogDetail
 
 	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index" json:"-"`
 }
 
 // ShuffleLogDetail はシャッフルのメンバー情報を表します
@@ -21,4 +23,6 @@ type ShuffleLogDetail struct {
 	MemberID         int
 
 	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt *time.Time `sql:"index" json:"-"`
 }
