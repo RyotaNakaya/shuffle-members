@@ -96,18 +96,18 @@ func (lm *LogManagementController) Update(ctx *gin.Context) {
 }
 
 // Delete はシャッフルログ詳細の削除を行います
-// func (lm *LogManagementController) Delete(ctx *gin.Context) {
-// 	db := db.GetDB()
+func (lm *LogManagementController) Delete(ctx *gin.Context) {
+	db := db.GetDB()
 
-// 	pid := ctx.Query("pid")
-// 	id := ctx.Param("id")
+	pid := ctx.Query("pid")
+	id := ctx.Param("id")
 
-// 	var detail model.ShuffleLogDetail
-// 	if err := db.Delete(&detail, id).Error; err != nil {
-// 		log.Print(err)
-// 		ctx.HTML(500, "500.html", gin.H{"Error": err})
-// 		return
-// 	}
+	var detail model.ShuffleLogDetail
+	if err := db.Delete(&detail, id).Error; err != nil {
+		log.Print(err)
+		ctx.HTML(500, "500.html", gin.H{"Error": err})
+		return
+	}
 
-// 	ctx.Redirect(302, "/log_management/index?pid="+pid)
-// }
+	ctx.Redirect(302, "/log_management/index?pid="+pid)
+}

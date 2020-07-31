@@ -27,6 +27,7 @@
                             <th>MemberID</th>
                             <th>CreatedAt</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,7 @@
                             <td>{{$detail.MemberID}}</td>
                             <td>{{$detail.CreatedAt.Format "2006/01/02"}}</td>
                             <td><a class="btn btn-secondary btn-sm" href="/log_management/edit/{{$detail.ID}}?pid={{$log.ProjectID}}">編集</a></td>
+                            <td><a class="btn btn-secondary btn-sm" href="/log_management/delete/{{.ID}}?pid={{$log.ProjectID}}">削除</a></td>
                         </tr>
                         {{end}}
                         {{end}}
