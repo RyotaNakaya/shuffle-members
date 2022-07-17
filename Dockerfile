@@ -15,7 +15,7 @@ WORKDIR /shuffle-members
 RUN CGO_ENABLED=0 GOOS=linux go build -o server ../shuffle-members/cmd/shuffle-app/main.go
 
 # run-timeイメージ
-FROM alpine:3.10
+FROM alpine:3.12.12
 COPY --from=builder /shuffle-members/server /app
 # TODO: テンプレートファイルも実行バイナリに含めてしまいたい
 COPY --from=builder /shuffle-members/web/ /web
